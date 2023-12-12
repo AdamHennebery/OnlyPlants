@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "271915370172",
+    "project_id": "onlyplants-3b597",
+    "storage_bucket": "onlyplants-3b597.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271915370172:android:83e06d18db765a56a872b9",
+        "android_client_info": {
+          "package_name": "com.example.only_plants"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBd1JGCPw10LHAnESXCJMxwnGmDsdxA3f0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
