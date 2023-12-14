@@ -75,6 +75,18 @@ class _PlantCollectionPageState extends State<PlantCollectionPage> {
     _plantCollection = getUserPlantCollection(widget.userId);
   }
 
+   Future<void> deletePlant(String plantId) async {
+    try {
+      // Assuming 'plants' is the collection name
+      await FirebaseFirestore.instance.collection('plants').doc(plantId).delete();
+      print('Plant deleted successfully');
+    } catch (e) {
+      print('Error deleting plant: $e');
+      // Handle the error as needed
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,6 +96,7 @@ class _PlantCollectionPageState extends State<PlantCollectionPage> {
             .scaffoldBackgroundColor, // Replace with your desired background color
         child: Scaffold(
           appBar: AppBar(
+             backgroundColor: Color.fromARGB(255, 231, 252, 214),
             title: Text('Your Plant Collection'),
           ),
           body: FutureBuilder<List<PlantCollectionItem>>(
@@ -98,10 +111,56 @@ class _PlantCollectionPageState extends State<PlantCollectionPage> {
               } else {
                 // Display the user's plant collection using ListView or other widgets
                 return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    final plant = snapshot.data![index];
-                    return ListTile(
+  itemCount: snapshot.data!.length,
+  itemBuilder: (context, index) {
+    final plant = snapshot.data![index];
+    return Dismissible(
+      // Provide a unique key for each item
+      key: UniqueKey(),
+      // Define the direction in which the swipe should delete the item
+      direction: DismissDirection.endToStart,
+      // Confirmation message displayed when user tries to delete
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Confirm Deletion'),
+              content: Text('Are you sure you want to delete this plant?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text('Delete'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      // Callback when the item is dismissed
+      onDismissed: (direction) {
+        // Implement the delete functionality here
+        deletePlant(plant.plantId);
+      },
+      // Background of the dismissible widget (the delete area)
+      background: Container(
+        color: Colors.red,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+                    child: ListTile(
                       title: Container(
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.secondary,
@@ -129,36 +188,44 @@ class _PlantCollectionPageState extends State<PlantCollectionPage> {
                             ),
                             const SizedBox(height: 20),
                             _buildOutlinedText(
-                                'Common Name: ${plant.commonName}',
-                                20,
-                                FontWeight.bold),
+                              'Common Name: ${plant.commonName}',
+                              20,
+                              FontWeight.bold,
+                            ),
                             const SizedBox(height: 10),
                             _buildOutlinedText(
-                                'Scientific Name: ${plant.documentData['scientific_name'][0] ?? ''}',
-                                18),
+                              'Scientific Name: ${plant.documentData['scientific_name'][0] ?? ''}',
+                              18,
+                            ),
                             const SizedBox(height: 10),
                             _buildOutlinedText(
-                                'Cycle: ${getCycle(plant.documentData['cycle'])}',
-                                18),
+                              'Cycle: ${getCycle(plant.documentData['cycle'])}',
+                              18,
+                            ),
                             const SizedBox(height: 10),
                             _buildOutlinedText(
-                                'Watering: ${getWateringDescription(plant.documentData['watering'])}',
-                                18),
+                              'Watering: ${getWateringDescription(plant.documentData['watering'])}',
+                              18,
+                            ),
                             const SizedBox(height: 10),
                             _buildOutlinedText(
-                                'Sunlight: ${getSunlightDescription(plant.documentData['sunlight'])}',
-                                18),
+                              'Sunlight: ${getSunlightDescription(plant.documentData['sunlight'])}',
+                              18,
+                            ),
                           ],
                         ),
                       ),
-                    );
-                  },
-                );
-              }
-            },
-          ),
-        ));
+                    ),
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
+
 
   Widget _buildOutlinedText(String text, double fontSize,
       [FontWeight? fontWeight]) {

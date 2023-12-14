@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:only_plants/pages/collection_page.dart';
 import 'package:only_plants/pages/login_page.dart';
@@ -6,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:only_plants/splash_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,22 +46,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        // Customize your theme here
-        primarySwatch: Colors.green,
+        // primarySwatch: Colors.green,
         scaffoldBackgroundColor: Color.fromARGB(255, 59, 138, 61),
-
-        // accentColor: Colors.orange,
         fontFamily: 'Roboto', // Change to your desired font
-        // Add more theme properties as needed
-        colorScheme: ColorScheme.light(
-          primary: Colors.green, // The primary color for your app
-          secondary: const Color.fromARGB(
+          colorScheme: const ColorScheme.light(
+          primary: Color.fromARGB(255, 44, 73, 10), // The primary color for your app
+          secondary: Color.fromARGB(
               255, 15, 73, 17), // The secondary color for your app
           background: Colors.white, // The background color for your app
-          // Add more colors as needed
         ),
       ),
-      home: CustomSplashScreen(),
+      home: AuthenticationWrapper(),
     );
   }
 }
@@ -67,55 +65,92 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
+
+    // Specify the image asset path or URL
+    String imageUrl =
+        'assets/plantman.avif'; // Replace with your actual image path
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),
-        backgroundColor: Theme.of(context)
-            .scaffoldBackgroundColor, // Empty title to hide the default app bar title
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize:
+            MainAxisSize.min, // Minimize the vertical space used by the column
         children: [
-          // Top section with centered title
+          // Title section
           Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.all(16.0),
             color: Theme.of(context).scaffoldBackgroundColor,
             child: Text(
               'Welcome to OnlyPlants',
-              style: Theme.of(context).textTheme.headline5,
+              style: GoogleFonts.getFont(
+                'Lobster',
+                textStyle: Theme.of(context).textTheme.headline5,
+                fontSize: 40.0,
+              ),
             ),
           ),
-          // Bottom section with your app content
-          Container(
-            // Add your content here
+          // Image section without Expanded
+          Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
-                );
-              },
-              child: const Text('Go to Search Page'),
+            child: Image.asset(
+              imageUrl,
+              fit: BoxFit.contain,
             ),
-          )
+          ),
+
+          Container(
+            margin: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 231, 252, 214),
+              borderRadius: BorderRadius.circular(
+                  15.0), // Increased the radius for more rounded corners
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(
+                      0.4), // Increased opacity for a darker shadow
+                  spreadRadius:
+                      2.5, // Increased spread radius for a wider shadow
+                  blurRadius:
+                      2, // Increased blur radius for a more blurred shadow
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: const Text(
+              'This app aims to make finding care information about your plants easy. Search an extensive collection of plants and save them to your personal collection for quick and easy access.',
+              style: TextStyle(fontSize: 19.0), // Increased font size
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        backgroundColor: Color.fromARGB(255, 231, 252, 214),
+        items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite), // Plant icon
-            label: 'Saved Plants',
+            icon: Icon(
+              Icons.favorite, // Plant icon
+              color: Colors.black, // Set the color to white
+            ),
+             label: 'Plant Collection',
+ 
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search), // Search icon
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today), // Calendar icon
-            label: 'Calendar',
-          ),
+  icon: Icon(
+    Icons.search,
+    color: Colors.black, // Set the icon color to black
+  ),
+  label: 'Search',
+  // Set the text style for the label
+  
+    // Use the primary text color from the current theme
+),
+      
         ],
         onTap: (index) {
           // Handle navigation to different pages based on the index

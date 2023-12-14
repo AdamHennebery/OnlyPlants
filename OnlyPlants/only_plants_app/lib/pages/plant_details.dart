@@ -12,69 +12,127 @@ class PlantDetailsPage extends StatelessWidget {
     required this.addToCollectionCallback, // Add this line
   }) : super(key: key);
 
-  ElevatedButton _buildAddToCollectionButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        addToCollectionCallback(plant);
-        // Optionally, you can show a confirmation message
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Plant added to collection!')),
-        );
-      },
-      child: Text('Add to Collection'),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(plant.commonName),
+Widget _buildAddToCollectionButton(BuildContext context) {
+  return Align(
+    alignment: Alignment.center,
+    child: Padding(
+      padding: const EdgeInsets.only(top: 30.0), // Adjust the top padding for space
+      child: SizedBox(
+        width: 200, // Set the desired width
+        child: ElevatedButton(
+          onPressed: () {
+            addToCollectionCallback(plant);
+            // Optionally, you can show a confirmation message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Plant added to collection!')),
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(20.0), // Set the desired padding
+          ),
+          child: Text(
+            'Add to Collection',
+            style: TextStyle(fontSize: 18), // Set the desired font size
+          ),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.network(
-              plant.defaultImage['medium_url'] ?? '',
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
+    ),
+  );
+}
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text(plant.commonName),
+      backgroundColor: Color.fromARGB(255, 231, 252, 214),
+    ),
+    body: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.network(
+            plant.defaultImage['medium_url'] ?? '',
+            height: 200,
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+          const SizedBox(height: 20),
+          _buildOutlinedText(
+            'Common Name: ${plant.commonName}',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          const SizedBox(height: 10),
+          _buildOutlinedText(
+            'Scientific Name: ${plant.scientificName}',
+            fontSize: 18,
+          ),
+          const SizedBox(height: 10),
+          _buildOutlinedText(
+            'Cycle: ${getCycle(plant.cycle)}',
+            fontSize: 18,
+          ),
+          const SizedBox(height: 10),
+          _buildOutlinedText(
+            'Watering: ${getWateringDescription(plant.watering)}',
+            fontSize: 18,
+          ),
+          const SizedBox(height: 10),
+          _buildOutlinedText(
+            'Sunlight: ${getSunlightDescription(plant.sunlight)}',
+            fontSize: 18,
+          ),
+          _buildAddToCollectionButton(context),
+          const SizedBox(height: 20), // Additional space at the bottom
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildOutlinedText(String text,
+    {double fontSize = 16, FontWeight? fontWeight, double strokeWidth = 2.0}) {
+  return Stack(
+    children: [
+      // Text with black border
+      Text(
+        text,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          foreground: Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = strokeWidth
+            ..color = Colors.black,
+          shadows: [
+            Shadow(
+              blurRadius: 1.0,
+              color: Colors.black.withOpacity(0.5),
+              offset: Offset(1, 1),
             ),
-            const SizedBox(height: 20),
-            Text(
-              'Common Name: ${plant.commonName}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Scientific Name: ${plant.scientificName}', // Replace with the actual property from your Plant class
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Watering: ${getCycle(plant.cycle)}',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Watering: ${getWateringDescription(plant.watering)}',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              'Sunlight: ${getSunlightDescription(plant.sunlight)}',
-              style: TextStyle(fontSize: 18),
-            ),
-            _buildAddToCollectionButton(context),
           ],
         ),
       ),
-    );
-  }
+      // Text with white fill
+      Text(
+        text,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          color: Colors.white,
+          shadows: [
+            Shadow(
+              blurRadius: 1.0,
+              color: Colors.black.withOpacity(0.9),
+              offset: Offset(1, 1),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
 }
-
 String getWateringDescription(String watering) {
   // Add your logic here to customize the displayed information based on watering
   switch (watering) {
@@ -121,4 +179,5 @@ String getSunlightDescription(List<String> sunlight) {
   } else {
     return 'Sunlight requirements vary';
   }
+}
 }

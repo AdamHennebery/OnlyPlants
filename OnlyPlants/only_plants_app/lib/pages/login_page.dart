@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:only_plants/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -169,11 +170,12 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-                const Text(
+                 Text(
                   "Welcome To OnlyPlants",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                   style: GoogleFonts.getFont(
+                'Lobster',
+                textStyle: Theme.of(context).textTheme.headline5,
+                fontSize: 40.0,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -240,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: Color.fromARGB(255, 59, 138, 61),
     );
   }
 

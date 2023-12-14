@@ -129,7 +129,7 @@ class _SearchPageState extends State<SearchPage> {
   void initState() {
     super.initState();
     _loadPlants(
-        maxPages: 1); // Load 5 pages initially (you can adjust as needed)
+        maxPages: 40); // Load 5 pages initially (you can adjust as needed)
   }
 
   void _addToCollection(Plant plant) async {
@@ -252,53 +252,12 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
-  // Future<void> _loadNextPage() async {
-  //   if (!_hasMoreData || _isLoading) {
-  //     return;
-  //   }
-  //   final String apiKey = 'sk-OkGd656bee00f1b6b3278';
-
-  //   setState(() {
-  //     _isLoading = true;
-  //   });
-
-  //   try {
-  //     final url = Uri.parse(
-  //         'https://perenual.com/api/species-list?key=$apiKey&page=$_currentPage');
-  //     print('Request URL: $url');
-
-  //     final response = await http.get(url);
-  //     print('Response Body: ${response.body}');
-
-  //     if (response.statusCode == 200) {
-  //       final plants =
-  //           await _plantApiService.searchPlants('', page: _currentPage);
-  //       setState(() {
-  //         if (plants.isEmpty) {
-  //           _hasMoreData = false;
-  //         } else {
-  //           _allPlants.addAll(plants);
-  //           _currentPage++;
-  //           _filteredPlants = List.from(_allPlants);
-  //         }
-  //       });
-  //     } else {
-  //       print('Failed to load plant list. Status code: ${response.statusCode}');
-  //       throw Exception('Failed to load plant list');
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+       backgroundColor: Color.fromARGB(255, 231, 252, 214),
         title: const Text('Search for a plant'),
         centerTitle: true,
       ),
