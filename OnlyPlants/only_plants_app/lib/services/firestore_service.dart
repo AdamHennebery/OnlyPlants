@@ -1,7 +1,7 @@
 // lib/services/firestore_service.dart
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:only_plants/search.dart'; // Adjust the import path based on your project structure
+import 'package:only_plants/pages/search.dart'; // Adjust the import path based on your project structure
 
 class FirestoreService {
   final CollectionReference plantCollection =

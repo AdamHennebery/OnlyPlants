@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:only_plants/search.dart';
+import 'package:only_plants/pages/search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class PlantDetailsPage extends StatelessWidget {
